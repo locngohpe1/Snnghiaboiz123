@@ -269,6 +269,7 @@
 <div class="fx" id="fx"></div>
 
 <audio id="backgroundMusic" loop></audio>
+<audio id="gameMusic" loop></audio>
 
 <div class="music-controls">
     <button class="btn music-btn" id="musicButton" onclick="toggleMusic()" title="Bật/tắt nhạc">🎵</button>
@@ -298,7 +299,8 @@ var CONFIG = {
     name: 'Nghĩa',                       // tên người được chúc
     nameAscii: 'NGHIA',                  // tên in chữ to (chỉ chữ có sẵn trong FONT bên dưới)
     from: '4 chị iêm ALTC',           // đổi thành tên của bạn
-    music: 'nghia-birthday-song.mp3',    // file nhạc để cùng thư mục
+    music: 'nghia-birthday-song.mp3',    // nhạc chính, để cùng thư mục
+    gameMusic: 'nghia-game-song.mp3',    // nhạc khi chơi game, xong game sẽ quay về nhạc chính
 
     // 📸 Ảnh dìm hàng hiện ra mỗi khi phá 1 ô gạch.
     // Để ảnh trong thư mục "photos" cùng chỗ với index.html, rồi liệt kê tên file ở đây.
@@ -315,14 +317,20 @@ var CONFIG = {
 // =========================================================
 // 🎵 NHẠC
 // =========================================================
-var music = document.getElementById('backgroundMusic');
-music.src = CONFIG.music;
-music.volume = 0.4;
+var mainTrack = document.getElementById('backgroundMusic');
+var gameTrack = document.getElementById('gameMusic');
+mainTrack.src = CONFIG.music;
+gameTrack.src = CONFIG.gameMusic;
+var gameTrackOk = true;
+
+var music = mainTrack;          // bài đang được chọn
 var musicPlaying = false;
+var userMuted = false;          // người xem tự bấm tắt nhạc
 var volumes = [0.4, 0.7, 0.1];
 var volumeIcons = ['🔊', '🔊', '🔉'];
 var volumeLabels = ['vừa', 'to', 'nhỏ'];
 var volumeIndex = 0;
+mainTrack.volume = gameTrack.volume = volumes[0];
 
 function showMusicInfo(msg) {
     var info = document.getElementById('musicInfo');
@@ -332,12 +340,14 @@ function showMusicInfo(msg) {
     showMusicInfo.t = setTimeout(function () { info.classList.remove('show'); }, 2200);
 }
 
-function playMusic() {
+function playMusic(msg) {
+    music.volume = volumes[volumeIndex];
     music.play().then(function () {
         musicPlaying = true;
         document.getElementById('musicButton').textContent = '🎵';
-        showMusicInfo('Nhạc lên!');
+        showMusicInfo(msg || 'Nhạc lên!');
     }).catch(function () {
+        musicPlaying = false;
         showMusicInfo('Trình duyệt chặn nhạc, bấm 🎵 để bật');
     });
 }
@@ -346,9 +356,11 @@ function toggleMusic() {
     if (musicPlaying) {
         music.pause();
         musicPlaying = false;
+        userMuted = true;
         document.getElementById('musicButton').textContent = '🔇';
         showMusicInfo('Đã tắt nhạc');
     } else {
+        userMuted = false;
         playMusic();
     }
 }
@@ -360,8 +372,40 @@ function changeVolume() {
     showMusicInfo('Âm lượng: ' + volumeLabels[volumeIndex]);
 }
 
-music.addEventListener('error', function () {
+// Chuyển bài: nhỏ dần bài cũ, rồi phát bài mới
+var fadeTimer = null;
+function switchTrack(next, msg) {
+    if (next === music) return;
+    if (next === gameTrack && !gameTrackOk) return;   // thiếu nhạc game thì giữ nhạc chính
+    var prev = music;
+    music = next;
+    clearInterval(fadeTimer);
+
+    if (userMuted) { prev.pause(); return; }          // đang tắt nhạc thì chỉ đổi bài, không phát
+
+    var startVol = prev.volume;
+    var steps = 10;
+    fadeTimer = setInterval(function () {
+        steps--;
+        prev.volume = Math.max(0, startVol * steps / 10);
+        if (steps <= 0) {
+            clearInterval(fadeTimer);
+            prev.pause();
+            prev.volume = volumes[volumeIndex];
+        }
+    }, 60);
+
+    // Nhạc game phát từ đầu; nhạc chính phát tiếp từ đoạn đang dở
+    if (next === gameTrack) next.currentTime = 0;
+    playMusic(msg);
+}
+
+mainTrack.addEventListener('error', function () {
     console.log('Không tìm thấy file nhạc: ' + CONFIG.music);
+});
+gameTrack.addEventListener('error', function () {
+    gameTrackOk = false;
+    console.log('Không tìm thấy file nhạc game: ' + CONFIG.gameMusic);
 });
 
 // =========================================================
@@ -621,6 +665,7 @@ var gameStarted = false;
 function startGame() {
     if (gameStarted) return;
     gameStarted = true;
+    switchTrack(gameTrack, 'Nhạc game lên! 🎮');
     document.getElementById('mainContainer').style.display = 'none';
 
     var g = document.createElement('div');
@@ -875,6 +920,7 @@ function gameWin() {
 function showFinal() {
     var g = document.getElementById('gameContainer');
     if (g) g.style.display = 'none';
+    switchTrack(mainTrack, 'Quay lại nhạc cũ 🎶');
 
     var f = document.createElement('div');
     f.className = 'container final';

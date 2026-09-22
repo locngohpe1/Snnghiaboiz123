@@ -234,12 +234,12 @@
 
 <div class="container" id="mainContainer">
     <div id="startScreen">
-        <h1 id="startTitle">Ê tró Nghĩa, em mày có quà nè</h1>
+        <h1 id="startTitle">Ê tró Nghĩa, em có quà nè</h1>
         <p class="sub">Bấm đi, ko bay nick đâu mà sợ kkk</p>
         <button class="btn start-btn" id="startButton">🎁 Mở quà</button>
         <p class="tip">
-            📱 Xài điện thoại thì xoay ngang màn hình cho dễ coi nha.<br>
-            🔊 Bật loa để order 5k âm nhạc sôi động 1 cho nó có không khí.
+            CHÚ Ý TRƯỚC KHI ZÔ: 1,📱 Xài điện thoại thì xoay ngang màn hình cho dễ coi nha.<br>
+            2, 🔊 Bật loa để order 5k âm nhạc sôi động 1 cho nó có không khí.
         </p>
     </div>
     <div class="art-container" id="artContainer"></div>
@@ -399,13 +399,13 @@ function buildArt() {
     ]));
     L.push('');
     L = L.concat(box('', [
-        'Không sến, ae mình lói ít hiệu nhiều.',
-        'Chỉ muốn nói: quen được Nghĩa là một deal hời.',
+        'Ae mình lói ít hiệu nhiều.',
+        'Chỉ muốn nói: quen được e Nghĩa là một deal hời.',
         '',
         'Cảm ơn vì lúc vui thì cùng quậy,',
-        'lúc khó thì không cần hỏi cũng có mặt.'
+        'lúc khó thì không cần hỏi cũng có mặt. (Chắc z haha :D)'
     ]));
-    L.push('', center('🍻   Nâng ly: 1... 2... 3... ZÔ!   🍻'));
+    L.push('', center('🍻   Vẫn là nói ít hiệu nhiều =))) Hẹp bi bợt đây CầnThơnese   🍻'));
     return Array.from(L.join('\n'));
 }
 
@@ -442,7 +442,7 @@ function showWish() {
         var w = document.createElement('div');
         w.className = 'wish';
         w.innerHTML =
-            '<h2>🎂 Sinh nhật vui vẻ nha, ' + CONFIG.name + '!</h2>' +
+            '<h2>🎂 Sinh nhật vui vẻ nha, tró ' + CONFIG.name + '!</h2>' +
             '<p>Tuổi mới: nhiều tiền, ít deadline, sức khỏe max level.</p>';
         document.getElementById('mainContainer').appendChild(w);
         setTimeout(showGameInvitation, 2500);
@@ -461,12 +461,12 @@ function showGameInvitation() {
     box.id = 'invite';
     box.innerHTML =
         '<h3>🎮 Còn một màn cuối</h3>' +
-        '<p>Chơi game 1 xíu không? Nhanh thôi, cuối game có lời nhắn.</p>' +
+        '<p>Chơi game 1 xíu ko? Nhanh thôi, yên tâm cuối game còn 1 món còa tinh thần.</p>' +
         '<div class="runaway-wrap">' +
             '<button class="btn runaway-btn" id="playBtn">😎 Chơi luôn (đố bắt)</button>' +
             '<button class="btn runaway-btn" id="lazyBtn">🥱 Lười lắm (đố bắt)</button>' +
         '</div>' +
-        '<p id="gameHint">Bấm vào nút nào cũng được, nếu bắt kịp 😏</p>';
+        '<p id="gameHint">Bấm vào nút nào cx được, nếu bắt kịp 😏</p>';
     document.getElementById('mainContainer').appendChild(box);
 
     ['play', 'lazy'].forEach(function (type) {
@@ -502,7 +502,7 @@ function runAway(btn, type) {
 function catchButton(btn) {
     if (caught) return;
     caught = true;
-    btn.textContent = '✅ Bắt được rồi!';
+    btn.textContent = 'Bắt được rồi!';
     btn.classList.add('caught');
     document.getElementById('gameHint').textContent =
         btn.id === 'lazyBtn' ? 'Buồn ẻ cũng phải chơi 😤 Vào game!' : 'Ok, vào game!';
@@ -510,13 +510,13 @@ function catchButton(btn) {
 }
 
 // =========================================================
-// 🧱 GAME: PHÁ ĐẢO TUỔI MỚI
+// 🧱 GAME: PHÁ ĐẢO TUỔI MỚI 🧱 
 // =========================================================
 var W = 600, H = 420, SPEED = 3.2;
 var OBSTACLES = [
-    'Deadline', 'Kẹt xe', 'Hết tiền', 'Thứ Hai', 'Mất ngủ', 'Sếp gọi',
+    'Deadline', 'Cô dạy quá giờ', 'Hết tiền', 'Thứ Hai', 'Thiếu ngủ', 'Brian Lương gọi',
     'Tăng ca', 'Hết pin', 'Thuyết trình', 'Hóa đơn', 'Trời mưa', 'Lười',
-    'Cảm cúm', 'Trễ hẹn', 'Overthink', 'Cháy túi', 'Họp online', 'Wifi lag'
+    'Cảm cúm', 'Trễ hẹn', 'Overthinking', 'Cháy túi', 'Họp online', 'Wifi lag'
 ];
 var ROW_COLORS = ['#ee4266', '#ffd23f', '#3bceac'];
 var canvas, ctx, paddle, ball, bricks, popups, score, lives, running = false, attached = true, lost = false;
@@ -531,10 +531,10 @@ function startGame() {
     g.className = 'game-container';
     g.id = 'gameContainer';
     g.innerHTML =
-        '<h2>🧱 PHÁ ĐẢO TUỔI MỚI</h2>' +
+        '<h2>🧱 PHÁ ĐẢO TUỔI MỚI 🧱</h2>' +
         '<div class="game-intro" id="gameIntro">' +
             '<div>Nhiệm vụ: đập hết chướng ngại để lấy cúp 🏆</div>' +
-            '<div class="rules">Có 5 mạng. Thua là quê đó nha.</div>' +
+            '<div class="rules">Có 5 mạng. Dễ vl đừng thua đấy</div>' +
             '<div id="countdown">5</div>' +
         '</div>' +
         '<div class="game-ui" id="gameUI"><span id="gameScore">Điểm: 0</span><span id="gameLives"></span></div>' +
@@ -763,12 +763,12 @@ function overlay(title, sub) {
 function gameOver() {
     running = false;
     lost = true;
-    overlay('💀 GAME OVER', 'Tuổi mới mà thua cái game? Bấm để chơi lại');
+    overlay('💀 GAME OVER', 'Game dễ thế mà còn thua =))) chịu =)) Bấm để chơi lại');
 }
 
 function gameWin() {
     running = false;
-    overlay('🏆 PHÁ ĐẢO!', '18 chướng ngại, đập sạch không chừa cái nào');
+    overlay('🏆 Gk3 gk3!', '18 chướng ngại, đập sạch không chừa cái nào');
     setTimeout(showFinal, 2800);
 }
 
@@ -784,9 +784,9 @@ function showFinal() {
     f.style.display = 'block';
     f.innerHTML =
         '<h1>🏆 Phá đảo tuổi mới!</h1>' +
-        '<p class="lead">Deadline, kẹt xe, hết tiền, thứ Hai... đập hết rồi đó. ' +
-        'Ngoài đời thì <em>gạch còn nhiều hơn và cứng hơn</em>, nhưng ac tin m sẽ phá được hết. ' +
-        'Còn lúc nào đập không nổi thì cứ gọi một tiếng, tui qua đập phụ.</p>' +
+        '<p class="lead">Deadline, Brian Lương, hết tiền, thứ Hai... đập hết rồi đó. ' +
+        'Ngoài đời thì <em> ac nghĩ là, gạch còn nhiều hơn và cứng hơn</em>, nhưng ac tin m sẽ phá được hết. ' +
+        'Còn lúc nào đập không nổi thì cứ gọi một tiếng, ac qua đập phụ =)) </p>' +
         '<div class="wishlist">' +
             '<h3>🎁 Quà thật hiện vật đã nhận r kkk. Còn đây là lời chúc:</h3>' +
             '<ul>' +

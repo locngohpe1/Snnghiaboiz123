@@ -216,8 +216,52 @@
     }
     .music-info.show { opacity: 1; }
 
+    /* 📸 Ảnh xoay vòng khi phá gạch */
+    .photo-pop {
+        position: fixed;
+        z-index: 1500;
+        pointer-events: none;
+        width: clamp(150px, 34vmin, 280px);
+        padding: 10px 10px 12px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+        text-align: center;
+        opacity: 0;
+    }
+    .photo-pop img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 3px;
+        background: #ddd;
+    }
+    .photo-pop .cap {
+        margin-top: 8px;
+        font-size: clamp(13px, 2.4vmin, 17px);
+        font-weight: 800;
+        color: var(--bg-deep);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .photo-pop.go { animation: spinPop 1.7s cubic-bezier(.2,.8,.3,1) forwards; }
+    @keyframes spinPop {
+        0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-720deg); }
+        30%  { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(calc(var(--tilt) + 8deg)); }
+        40%  { transform: translate(-50%, -50%) scale(1) rotate(var(--tilt)); }
+        75%  { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--tilt)); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(540deg); }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .drop, .wish { animation: none; display: none; }
+        .photo-pop.go { animation: fadePop 1.5s ease forwards; }
+        @keyframes fadePop {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--tilt)); }
+            20%, 75% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--tilt)); }
+        }
     }
 </style>
 </head>
@@ -231,6 +275,7 @@
     <button class="btn music-btn" id="volumeButton" onclick="changeVolume()" title="Đổi âm lượng">🔊</button>
 </div>
 <div class="music-info" id="musicInfo"></div>
+<div class="photo-pop" id="photoPop"><img id="photoPopImg" alt="Ảnh dìm hàng"><div class="cap" id="photoPopCap"></div></div>
 
 <div class="container" id="mainContainer">
     <div id="startScreen">
@@ -253,7 +298,18 @@ var CONFIG = {
     name: 'Nghĩa',                       // tên người được chúc
     nameAscii: 'NGHIA',                  // tên in chữ to (chỉ chữ có sẵn trong FONT bên dưới)
     from: '4 chị iêm ALTC',           // đổi thành tên của bạn
-    music: 'nghia-birthday-song.mp3'     // file nhạc để cùng thư mục
+    music: 'nghia-birthday-song.mp3',    // file nhạc để cùng thư mục
+
+    // 📸 Ảnh dìm hàng hiện ra mỗi khi phá 1 ô gạch.
+    // Để ảnh trong thư mục "photos" cùng chỗ với index.html, rồi liệt kê tên file ở đây.
+    // Ít ảnh hơn số gạch (18) cũng được, ảnh sẽ được xoay vòng. Ảnh nào sai tên sẽ tự bỏ qua.
+    photos: [
+        'photos/nghia1.jpg',
+        'photos/nghia2.jpg',
+        'photos/nghia3.jpg',
+        'photos/nghia4.jpg',
+        'photos/nghia5.jpg'
+    ]
 };
 
 // =========================================================
@@ -513,6 +569,46 @@ function catchButton(btn) {
 // 🧱 GAME: PHÁ ĐẢO TUỔI MỚI 🧱 
 // =========================================================
 var W = 600, H = 420, SPEED = 3.2;
+// 📸 Ảnh xoay vòng
+var photoPool = [];      // chỉ chứa ảnh load được
+var photoQueue = [];
+
+function preloadPhotos() {
+    (CONFIG.photos || []).forEach(function (src) {
+        var img = new Image();
+        img.onload = function () { photoPool.push(src); };
+        img.onerror = function () { console.log('Không tìm thấy ảnh: ' + src); };
+        img.src = src;
+    });
+}
+
+function nextPhoto() {
+    if (!photoPool.length) return null;
+    if (!photoQueue.length) {
+        photoQueue = photoPool.slice().sort(function () { return Math.random() - 0.5; });
+    }
+    return photoQueue.shift();
+}
+
+function showPhotoPop(label) {
+    var src = nextPhoto();
+    if (!src) return;
+    var pop = document.getElementById('photoPop');
+    document.getElementById('photoPopImg').src = src;
+    document.getElementById('photoPopCap').textContent = '💥 Bye ' + label;
+
+    // Hiện lệch sang trái/phải một chút để không che hết bóng
+    var side = Math.random() < 0.5 ? -1 : 1;
+    pop.style.left = (50 + side * (12 + Math.random() * 14)) + 'vw';
+    pop.style.top = (38 + Math.random() * 20) + 'vh';
+    pop.style.setProperty('--tilt', ((Math.random() * 16 - 8).toFixed(1)) + 'deg');
+
+    // Chạy lại animation kể cả khi ảnh trước chưa biến mất
+    pop.classList.remove('go');
+    void pop.offsetWidth;
+    pop.classList.add('go');
+}
+
 var OBSTACLES = [
     'Deadline', 'Cô dạy quá giờ', 'Hết tiền', 'Thứ Hai', 'Thiếu ngủ', 'Brian Lương gọi',
     'Tăng ca', 'Hết pin', 'Thuyết trình', 'Hóa đơn', 'Trời mưa', 'Lười',
@@ -679,6 +775,7 @@ function loop() {
             else ball.dx = -ball.dx;
             score += 10;
             popups.push({ x: b.x + b.w / 2, y: b.y, text: 'Bye ' + b.label, life: 50 });
+            showPhotoPop(b.label);
             updateUI();
             if (bricks.every(function (x) { return x.dead; })) { draw(); gameWin(); return; }
             break;
@@ -839,6 +936,7 @@ window.addEventListener('load', function () {
     document.getElementById('startTitle').textContent = 'Ê ' + CONFIG.name + ', có quà nè';
     document.title = '🎂 Happy Birthday ' + CONFIG.name + ' 🎂';
     document.getElementById('startButton').addEventListener('click', startSurprise);
+    preloadPhotos();
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) startConfetti();
 });
 </script>

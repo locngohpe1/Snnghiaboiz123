@@ -234,12 +234,12 @@
 
 <div class="container" id="mainContainer">
     <div id="startScreen">
-        <h1 id="startTitle">Ê Nghĩa, có quà nè</h1>
-        <p class="sub">Bấm đi, không có virus đâu 😏</p>
+        <h1 id="startTitle">Ê tró Nghĩa, em mày có quà nè</h1>
+        <p class="sub">Bấm đi, ko bay nick đâu mà sợ kkk</p>
         <button class="btn start-btn" id="startButton">🎁 Mở quà</button>
         <p class="tip">
             📱 Xài điện thoại thì xoay ngang màn hình cho dễ coi nha.<br>
-            🔊 Bật loa lên cho có không khí.
+            🔊 Bật loa để order 5k âm nhạc sôi động 1 cho nó có không khí.
         </p>
     </div>
     <div class="art-container" id="artContainer"></div>
@@ -252,7 +252,7 @@
 var CONFIG = {
     name: 'Nghĩa',                       // tên người được chúc
     nameAscii: 'NGHIA',                  // tên in chữ to (chỉ chữ có sẵn trong FONT bên dưới)
-    from: 'Thằng bạn chí cốt',           // đổi thành tên của bạn
+    from: '4 chị iêm ALTC',           // đổi thành tên của bạn
     music: 'nghia-birthday-song.mp3'     // file nhạc để cùng thư mục
 };
 
@@ -391,16 +391,16 @@ function buildArt() {
     L.push(center('>>>  LEVEL UP!  +1 TUỔI  <<<'), '');
     L = L.concat(box('HỒ SƠ NHÂN VẬT', [
         'Tên            : ' + CONFIG.name,
-        'Level          : +1 (vừa lên cấp hôm nay)',
+        'Level          : +1 hôm nay (thực ra lên cấp được 1 tháng r kkk)',
         'Máu            : vẫn trâu',
-        'Độ đẹp trai    : tự chấm 10/10',
-        'Skill đặc biệt : "5 phút nữa tới" (thực tế 30 phút)',
-        'Điểm yếu       : đồ ăn ngon, deal giảm giá'
+        'Độ đẹp trai    : Nghĩa tự chấm 10/10',
+        'Skill đặc biệt : Siêu nhiệt tình (và rất damdang)',
+        'Điểm yếu       : đôi khi hơi gay, và ngủ hơi ít'
     ]));
     L.push('');
     L = L.concat(box('', [
-        'Không sến, không dài dòng.',
-        'Chỉ muốn nói: quen được ông là một deal hời.',
+        'Không sến, ae mình lói ít hiệu nhiều.',
+        'Chỉ muốn nói: quen được Nghĩa là một deal hời.',
         '',
         'Cảm ơn vì lúc vui thì cùng quậy,',
         'lúc khó thì không cần hỏi cũng có mặt.'
@@ -461,7 +461,7 @@ function showGameInvitation() {
     box.id = 'invite';
     box.innerHTML =
         '<h3>🎮 Còn một màn cuối</h3>' +
-        '<p>Chơi xíu game không? Nhanh thôi, cuối game có lời nhắn.</p>' +
+        '<p>Chơi game 1 xíu không? Nhanh thôi, cuối game có lời nhắn.</p>' +
         '<div class="runaway-wrap">' +
             '<button class="btn runaway-btn" id="playBtn">😎 Chơi luôn (đố bắt)</button>' +
             '<button class="btn runaway-btn" id="lazyBtn">🥱 Lười lắm (đố bắt)</button>' +
@@ -491,8 +491,8 @@ function runAway(btn, type) {
     btn.style.top = Math.max(90, Math.random() * maxY) + 'px';
 
     var msgs = [
-        'Hụt rồi kìa 😏 (1/3)',
-        'Chậm quá ông ơi 🐢 (2/3)',
+        'Hụt rồi kìa con vk😏 (1/3)',
+        'Chậm quá con vk 🐢 (2/3)',
         'Thôi mệt rồi, cho bắt đó 😮‍💨'
     ];
     document.getElementById('gameHint').textContent = msgs[runs[type] - 1];
@@ -505,7 +505,7 @@ function catchButton(btn) {
     btn.textContent = '✅ Bắt được rồi!';
     btn.classList.add('caught');
     document.getElementById('gameHint').textContent =
-        btn.id === 'lazyBtn' ? 'Lười cũng phải chơi 😤 Vào game!' : 'Ok, vào game!';
+        btn.id === 'lazyBtn' ? 'Buồn ẻ cũng phải chơi 😤 Vào game!' : 'Ok, vào game!';
     setTimeout(startGame, 1500);
 }
 
@@ -515,7 +515,7 @@ function catchButton(btn) {
 var W = 600, H = 420, SPEED = 3.2;
 var OBSTACLES = [
     'Deadline', 'Kẹt xe', 'Hết tiền', 'Thứ Hai', 'Mất ngủ', 'Sếp gọi',
-    'Tăng ca', 'Hết pin', 'Bug', 'Hóa đơn', 'Trời mưa', 'Lười',
+    'Tăng ca', 'Hết pin', 'Thuyết trình', 'Hóa đơn', 'Trời mưa', 'Lười',
     'Cảm cúm', 'Trễ hẹn', 'Overthink', 'Cháy túi', 'Họp online', 'Wifi lag'
 ];
 var ROW_COLORS = ['#ee4266', '#ffd23f', '#3bceac'];
@@ -785,15 +785,15 @@ function showFinal() {
     f.innerHTML =
         '<h1>🏆 Phá đảo tuổi mới!</h1>' +
         '<p class="lead">Deadline, kẹt xe, hết tiền, thứ Hai... đập hết rồi đó. ' +
-        'Ngoài đời thì <em>gạch còn nhiều hơn và cứng hơn</em>, nhưng tui tin ông phá được hết. ' +
+        'Ngoài đời thì <em>gạch còn nhiều hơn và cứng hơn</em>, nhưng ac tin m sẽ phá được hết. ' +
         'Còn lúc nào đập không nổi thì cứ gọi một tiếng, tui qua đập phụ.</p>' +
         '<div class="wishlist">' +
-            '<h3>🎁 Quà thật gặp rồi đưa. Còn đây là lời chúc:</h3>' +
+            '<h3>🎁 Quà thật hiện vật đã nhận r kkk. Còn đây là lời chúc:</h3>' +
             '<ul>' +
-                '<li>💪 Sức khỏe max level, khỏi cần hồi máu</li>' +
-                '<li>💰 Ví lúc nào cũng dày, deadline lúc nào cũng mỏng</li>' +
-                '<li>🚀 Làm gì cũng thuận, muốn gì cũng có</li>' +
-                '<li>🍻 Anh em vẫn đủ mặt mỗi lần nâng ly</li>' +
+                '<li>C Anna: Chị chúc Nghĩa mạnh khoẻ và nhanh giàu còn cưu mang chị :))) </li>' +
+                '<li>A Bim: Chúc em, gái theo 1 bầy, mỗi đêm kẹp nách 1 em </li>' +
+                '<li>Cháo Thỏ: Tớ mong Nghĩa dành nhiều thời gian hơn cho bản thân, chúc Nghĩa đạt được những ước nguyện đã ấp ủ bấy lâu nay, sau này làm Tiến sĩ cho tớ ké một chân trợ lý 🤓🙏</li>' +
+                '<li>Thêm một tuổi mới, chúc Nghĩa biết chăm sóc bản thân nhiều hơn (như cách cậu hay lo cho người khác), tâm thế lúc nào cũng vững vàng để đi qua mọi áp lực. Mong là trên hành trình học tập và rèn giũa bản thân, cậu luôn giữ được sự tò mò, học đâu chắc đó và từng bước chạm tới mục tiêu của mình. Cứ vững bước và kiên định với con đường đã chọn nhé Tiến sĩ 🙆‍♀️</li>' +
                 '<li>⏰ Và bớt "5 phút nữa tới" giùm cái 😤</li>' +
             '</ul>' +
             '<div class="sign">Sinh nhật vui vẻ nha, ' + CONFIG.name + '! 🎂' +
@@ -810,7 +810,7 @@ function showFinal() {
 function shareExperience() {
     var data = {
         title: '🎂 Quà sinh nhật cho ' + CONFIG.name,
-        text: 'Có người làm hẳn cái web chúc sinh nhật nè 🎉',
+        text: 'Sướng =)) nhất e, được làm hẳn cái web chúc sinh nhật nè 🎉',
         url: window.location.href
     };
     if (navigator.share) {
